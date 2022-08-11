@@ -1,0 +1,38 @@
+{
+  "name": "unsa-app-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "lint": "eslint",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UNSA-OUIS/unsa-app-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UNSA-OUIS/unsa-app-backend/issues"
+  },
+  "homepage": "https://github.com/UNSA-OUIS/unsa-app-backend#readme",
+  "devDependencies": {
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "faker": "^5.5.3",
+    "joi": "^17.6.0",
+    "mysql": "^2.18.1",
+    "pg": "^8.7.3"
+  }
+}
