@@ -2,7 +2,7 @@ const express = require('express');
 const faker = require('faker');
 const routersApi = require('./routes');
 const cors = require('cors');
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler');
+const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/errorHandler');
 
 //se inicia la aplicación
 const app = express();
@@ -31,6 +31,7 @@ app.get('/', (req, res) => {
 routersApi(app);
 
 app.use(logErrors);
+app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
