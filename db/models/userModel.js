@@ -34,10 +34,14 @@ const UserSchema = {
 
 class User extends Model {
     static associate(models) {
-        /*this.hasOne(models.Customer, { 
-            as: 'customer',
-            foreignKey: 'userId'
-        })*/
+        this.hasOne(models.Actmail, { 
+            as: 'siac_email',
+            foreignKey: "mail",
+            sourceKey: 'email',
+            on: {
+                mail: Sequelize.literal("`users`.`email` = `siac`.`actmail`.`mail`") 
+              }
+        })
 
     }
 

@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
-const {models} = require('../libs/sequelize');
+const {models} = require('../libs/sequelize').mainDB;
+const siacModels = require('../libs/sequelize').siac.models;
 
 class UsersService {
     constructor () {
@@ -17,7 +18,19 @@ class UsersService {
         const data = await models.User.findAll({
             paranoid: false
         });
-        return data;
+        var bar = new Promise((resolve, reject) => {
+            data.forEach(async (user, index, array) => {
+                let emailName = user.dataValues.email.substring(0, user.dataValues.email.indexOf('@'));
+                user.dataValues.actmail = await siacModels.Actmail.findOne({
+                    where: { mail: emailName } 
+                });
+                if (index === array.length -1) resolve();
+            });
+        });
+        
+        return bar.then(()=>{
+            return data;
+        })
 
     }
 
