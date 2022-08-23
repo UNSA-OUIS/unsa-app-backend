@@ -18,6 +18,7 @@ class UsersService {
         const data = await models.User.findAll({
             paranoid: false
         });
+        return data;
         var bar = new Promise((resolve, reject) => {
             data.forEach(async (user, index, array) => {
                 let emailName = user.dataValues.email.substring(0, user.dataValues.email.indexOf('@'));

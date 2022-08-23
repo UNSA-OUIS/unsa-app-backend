@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 //dando acceso a otros origenes diferentes del localhost
-const whiteList = ['http://localhost:8080', 'https://myapp.pe'];
+const whiteList = ['http://localhost:8080'];
 const options = {
     origin: (origin, callback) =>{
         if (whiteList.includes(origin)){
