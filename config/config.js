@@ -26,6 +26,14 @@ const config = {
             "port": process.env.DB_PORT2,
             "dialect": "mysql"
         },
+        "bancoDatabase": {
+            "database": process.env.DB_NAME3, 
+            "username": process.env.DB_USER3,  
+            "password":  process.env.DB_PASSWORD3,
+            "host": process.env.DB_HOST3,
+            "port": process.env.DB_PORT3,
+            "dialect": "mysql"
+        },
     },
 }
 

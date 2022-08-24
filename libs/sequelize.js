@@ -26,7 +26,17 @@ const siac = new Sequelize(URI2, {
 });
 siac.dialect.supports.schemas = true;
 
+//conexion para mysql banco_bcp
+const USER3 = encodeURIComponent(config.databases['bancoDatabase'].username);
+const PASSWORD3 = encodeURIComponent(config.databases['bancoDatabase'].password);
+const URI3 = `${config.databases['bancoDatabase'].dialect}://${USER3}:${PASSWORD3}@${config.databases['bancoDatabase'].host}:${config.databases['bancoDatabase'].port}/${config.databases['bancoDatabase'].database}`
 
-setupModels(mainDB, siac);
+const banco = new Sequelize(URI3, {
+    dialect: config.databases['bancoDatabase'].dialect,
+    logging: console.log
+});
+banco.dialect.supports.schemas = true;
 
-module.exports = { mainDB, siac };
+setupModels(mainDB, siac, banco);
+
+module.exports = { mainDB, siac, banco };
