@@ -37,6 +37,17 @@ const banco = new Sequelize(URI3, {
 });
 banco.dialect.supports.schemas = true;
 
-setupModels(mainDB, siac, banco);
+//conexion para mysql unsapay
+const USER4 = encodeURIComponent(config.databases['unsapayDatabase'].username);
+const PASSWORD4 = encodeURIComponent(config.databases['unsapayDatabase'].password);
+const URI4 = `${config.databases['unsapayDatabase'].dialect}://${USER4}:${PASSWORD4}@${config.databases['unsapayDatabase'].host}:${config.databases['unsapayDatabase'].port}/${config.databases['unsapayDatabase'].database}`
 
-module.exports = { mainDB, siac, banco };
+const unsapay = new Sequelize(URI4, {
+    dialect: config.databases['unsapayDatabase'].dialect,
+    logging: console.log
+});
+unsapay.dialect.supports.schemas = true;
+
+setupModels(mainDB, siac, banco, unsapay);
+
+module.exports = { mainDB, siac, banco, unsapay };

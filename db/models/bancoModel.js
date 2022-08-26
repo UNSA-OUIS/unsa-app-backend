@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes, Sequelize, Op } = require('sequelize');
 
 const BANCO_TABLE = 'banco_bcp';
 
@@ -102,7 +102,13 @@ const BancoSchema = {
     tipoPagoIdUnsapay: {
         field: 'tipo_pago_id_unsapay',
         allowNull: true,
-        type: DataTypes.BIGINT
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'tipo_pago',
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
     },
     oper: {
         field: 'oper',
@@ -177,7 +183,28 @@ const BancoSchema = {
 }
 
 class Banco extends Model {
-    static associate(models) {
+    static associate(unsapayModels, siacModels) {
+        this.belongsTo(unsapayModels.TipoPago, { 
+            as: 'tipo_pago',
+            foreignKey: "tipo_pago_id_unsapay"
+        });
+
+        this.belongsTo(siacModels.Actescu, {
+            as: 'escuela',
+            foreignKey: "nues"
+        });
+        this.belongsTo(siacModels.Actespe, {
+            as: 'especialidad',
+            foreignKey: "nues",
+            sourceKey: "nues",
+            scope: {
+                [Op.and]: Sequelize.where(Sequelize.col("Banco.espe"),
+                    // '=',
+                    '=', // or you can use '=',
+                    Sequelize.col("especialidad.numesp")),
+            },
+            constraints: false,
+        });
 
     }
 
@@ -187,7 +214,8 @@ class Banco extends Model {
             tableName: BANCO_TABLE,
             modelName: 'Banco',
             timestamps: false,
-            paranoid: false
+            paranoid: false,
+            schema: "banco"
         }
     }
 }

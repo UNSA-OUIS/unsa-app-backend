@@ -34,6 +34,14 @@ const config = {
             "port": process.env.DB_PORT3,
             "dialect": "mysql"
         },
+        "unsapayDatabase": {
+            "database": process.env.DB_NAME4, 
+            "username": process.env.DB_USER4,  
+            "password":  process.env.DB_PASSWORD4,
+            "host": process.env.DB_HOST4,
+            "port": process.env.DB_PORT4,
+            "dialect": "mysql"
+        },
     },
 }
 
