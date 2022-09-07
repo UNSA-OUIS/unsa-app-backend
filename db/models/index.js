@@ -22,6 +22,7 @@ function setupModels(mainDB, siac, banco, unsapay) {
     //Se inicializan relaciones de los modelos
     User.associate(siac.models);
     TipoPago.associate(unsapay.models);
+    Concepto.associate(unsapay.models);
     Banco.associate(unsapay.models, siac.models);
 }
 

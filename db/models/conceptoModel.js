@@ -34,7 +34,10 @@ const ConceptoSchema = {
 
 class Concepto extends Model {
     static associate(models) {
-        
+        this.hasOne(models.TipoPago, { 
+            as: 'tipo_pago',
+            foreignKey: "concepto_id"
+        });
 
     }
 

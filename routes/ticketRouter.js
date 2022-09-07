@@ -16,4 +16,15 @@ router.get('/', async (req, res, next) => {
     
 });
 
+router.get('/conceptos', async (req, res, next) => {
+    try {
+        const conceptos = await service.getConceptos(req.query);
+
+        res.json(conceptos);
+    } catch (error) {
+        next(error);
+    }
+    
+});
+
 module.exports = router;

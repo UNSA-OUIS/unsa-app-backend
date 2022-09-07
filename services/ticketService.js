@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const {models} = require('../libs/sequelize').banco;
+const modelsUnsapay = require('../libs/sequelize').unsapay.models;
 const { Sequelize, Op } = require('sequelize');
 
 class TicketService {
@@ -62,6 +63,20 @@ class TicketService {
             ]
         });
         
+        return data;
+    }
+
+    async getConceptos(query) {
+        const data = await modelsUnsapay.Concepto.findAll({
+            include: [
+                {
+                    where: {administrado_id: query.administradoId},
+                    association: 'tipo_pago',
+                }
+            ],
+            group: ["id"]
+        });
+
         return data;
     }
 }
