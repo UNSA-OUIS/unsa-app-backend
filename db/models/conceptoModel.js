@@ -45,7 +45,7 @@ class Concepto extends Model {
             modelName: 'Concepto',
             timestamps: true,
             paranoid: true,
-            schema: "db_unsapay"
+            schema: process.env.DB_NAME4
         }
     }
 }

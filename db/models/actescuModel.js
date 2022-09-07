@@ -27,7 +27,7 @@ class Actescu extends Model {
             tableName: ACTESCU_TABLE,
             modelName: 'Actescu',
             timestamps: false,
-            schema: "siac"
+            schema: process.env.DB_NAME2
         }
     }
 }

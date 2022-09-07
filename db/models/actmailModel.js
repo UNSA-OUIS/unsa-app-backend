@@ -34,7 +34,7 @@ class Actmail extends Model {
             tableName: ACTMAIL_TABLE,
             modelName: 'Actmail',
             timestamps: false,
-            schema: "siac"
+            schema: process.env.DB_NAME2
         }
     }
 }

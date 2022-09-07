@@ -32,7 +32,7 @@ class Actespe extends Model {
             tableName: ACTESPE_TABLE,
             modelName: 'Actespe',
             timestamps: false,
-            schema: "siac"
+            schema: process.env.DB_NAME2
         }
     }
 }

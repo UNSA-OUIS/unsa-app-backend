@@ -215,7 +215,7 @@ class Banco extends Model {
             modelName: 'Banco',
             timestamps: false,
             paranoid: false,
-            schema: "banco"
+            schema: process.env.DB_NAME3
         }
     }
 }

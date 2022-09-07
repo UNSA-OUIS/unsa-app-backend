@@ -64,7 +64,7 @@ class TipoPago extends Model {
             modelName: 'TipoPago',
             timestamps: true,
             paranoid: true,
-            schema: "db_unsapay"
+            schema: process.env.DB_NAME4
         }
     }
 }
