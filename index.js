@@ -6,6 +6,14 @@ const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('
 
 //se inicia la aplicación
 const app = express();
+
+// bodyparser
+const bodyParser = require('body-parser')
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
