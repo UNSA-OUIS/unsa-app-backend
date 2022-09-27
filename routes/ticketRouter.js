@@ -18,7 +18,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/conceptos', async (req, res, next) => {
     try {
-        const conceptos = await service.getConceptos(req.query);
+        const conceptos = await service.getConcepts(req.query);
 
         res.json(conceptos);
     } catch (error) {
@@ -26,5 +26,18 @@ router.get('/conceptos', async (req, res, next) => {
     }
     
 });
+
+router.post('/generate-code',
+    async (req, res, next) => {
+        try {
+            const body = req.body;
+            const newUser = await service.generadeCode(body);
+            res.status(201).json(newUser);
+        } catch (error) {
+            next(error);
+        }
+        
+    }
+);
 
 module.exports = router;
