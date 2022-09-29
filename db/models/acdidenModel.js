@@ -1,21 +1,28 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const ACTMAIL_TABLE = 'actmail';
+const ACDIDEN_TABLE = 'acdiden';
 
-const ActmailSchema = {
+const AcdidenSchema = {
     cui: {
         allowNull: false,
         type: DataTypes.STRING,
         primaryKey: true
     },
-    mail: {
+    apn: {
         allowNull: false,
         type: DataTypes.STRING,
-        unique: true
+    },
+    sex: {
+        allowNull: false,
+        type: DataTypes.STRING
+    },
+    dic: {
+        allowNull: false,
+        type: DataTypes.STRING
     }
 }
 
-class Actmail extends Model {
+class Acdiden extends Model {
     static associate(models) {
         /*this.hasOne(models.Customer, { 
             as: 'customer',
@@ -27,12 +34,12 @@ class Actmail extends Model {
     static config(sequelize) {
         return {
             sequelize,
-            tableName: ACTMAIL_TABLE,
-            modelName: 'Actmail',
+            tableName: ACDIDEN_TABLE,
+            modelName: 'Acdiden',
             timestamps: false,
             schema: process.env.DB_NAME2
         }
     }
 }
 
-module.exports = { ACTMAIL_TABLE, ActmailSchema, Actmail }
+module.exports = { ACDIDEN_TABLE, AcdidenSchema, Acdiden }

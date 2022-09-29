@@ -9,12 +9,15 @@ const { Actespe, ActespeSchema } = require('./actespeModel');
 const { Canje, CanjeSchema } = require('./canjeModel');
 const { Comprobante, ComprobanteSchema } = require('./comprobanteModel');
 const { CuentaCorriente, CuentaCorrienteSchema } = require('./cuentaCorrienteModel');
+const { Acdiden, AcdidenSchema} = require('./acdidenModel');
+const { Siacdoc, SiacdocSchema} = require('./siacdocModel');
 
 
 function setupModels(mainDB, siac, banco, unsapay, siscaja) {
     //Se inicializan modelos
     User.init(UserSchema, User.config(mainDB));
     Actmail.init(ActmailSchema, Actmail.config(siac));
+    Acdiden.init(AcdidenSchema, Acdiden.config(siac));
     Banco.init(BancoSchema, Banco.config(banco));
     Concepto.init(ConceptoSchema, Concepto.config(unsapay));
     Administrado.init(AdministradoSchema, Administrado.config(unsapay));
@@ -24,6 +27,7 @@ function setupModels(mainDB, siac, banco, unsapay, siscaja) {
     Canje.init(CanjeSchema, Canje.config(siscaja));
     Comprobante.init(ComprobanteSchema, Comprobante.config(siscaja));
     CuentaCorriente.init(CuentaCorrienteSchema, CuentaCorriente.config(siscaja));
+    Siacdoc.init(SiacdocSchema, Siacdoc.config(siac));
 
     //Se inicializan relaciones de los modelos
     User.associate(siac.models);
