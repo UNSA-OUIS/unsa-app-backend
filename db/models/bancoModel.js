@@ -74,11 +74,6 @@ const BancoSchema = {
         allowNull: true,
         type: DataTypes.DOUBLE
     },
-    numRecibo: {
-        field: 'num_recibo',
-        allowNull: true,
-        type: DataTypes.BIGINT
-    },
     nroReso: {
         field: 'nro_reso',
         allowNull: true,
@@ -103,10 +98,6 @@ const BancoSchema = {
         field: 'tipo_pago_id_unsapay',
         allowNull: true,
         type: DataTypes.INTEGER,
-        references: {
-            model: 'tipo_pago',
-            key: 'id',
-        },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
     },
@@ -129,11 +120,6 @@ const BancoSchema = {
         field: 'dscto',
         allowNull: true,
         type: DataTypes.STRING
-    },
-    pension: {
-        field: 'pension',
-        allowNull: true,
-        type: DataTypes.CHAR
     },
     fvencimiento: {
         field: 'fvencimiento',
@@ -186,7 +172,8 @@ class Banco extends Model {
     static associate(unsapayModels, siacModels) {
         this.belongsTo(unsapayModels.TipoPago, { 
             as: 'tipo_pago',
-            foreignKey: "tipo_pago_id_unsapay"
+            foreignKey: "tipoPagoIdUnsapay",
+            separate: true,
         });
 
         this.belongsTo(siacModels.Actescu, {

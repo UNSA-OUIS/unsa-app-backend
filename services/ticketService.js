@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 const {models} = require('../libs/sequelize').banco;
 const modelsUnsapay = require('../libs/sequelize').unsapay.models;
+const modelsSiac = require('../libs/sequelize').siac.models;
 const { Sequelize, Op } = require('sequelize');
 
 class TicketService {
@@ -34,7 +35,7 @@ class TicketService {
             /*attributes: ['id', 'emailUnsapay', 'tipoPag', 'usadoUnsapay', 'tipo_pago_id_unsapay',
                             'espe', 'inscCodiWeb', 'fcreacionUnsapay', 'estaId'],
             */
-            attributes: {
+            /*attributes: {
                 include: [
                     [
                         // Note the wrapping parentheses in the call below!
@@ -49,21 +50,44 @@ class TicketService {
                         'especialidad'
                     ]
                 ]
-            },
+            },*/
             include: [
-                {
+                /*{
                     where: Object.keys(whereTipoPago).length !== 0 ? whereTipoPago: null,
                     association: 'tipo_pago',
                     include: ['concepto', 'administrado']
-                },
+                },*/
                 'escuela'
             ],
             order: [
                 ['fcreacionUnsapay', 'DESC']
             ]
         });
+
+        var bar = new Promise((resolve, reject) => {
+            data.forEach(async (element, index, array) => {
+                element.dataValues.pago = await modelsUnsapay.TipoPago.findOne({
+                    where: { id: element.tipoPagoIdUnsapay},
+                    where: Object.keys(whereTipoPago).length !== 0 ? whereTipoPago: null,
+                    include: ['concepto', 'administrado']
+                });
+
+                element.dataValues.especialidad = await modelsSiac.Actespe.findOne({
+                    where: { 
+                        nues: element.nues,
+                        numesp: element.espe
+                    }
+                });
+                if (index === array.length -1) resolve();
+            });
+        });
         
-        return data;
+        return bar.then(()=>{
+            return data.filter((element) => {
+                return element.dataValues.pago != null;
+            });
+        })
+
     }
 
     async getConceptos(query) {
