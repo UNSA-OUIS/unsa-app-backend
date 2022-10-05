@@ -48,6 +48,17 @@ const unsapay = new Sequelize(URI4, {
 });
 unsapay.dialect.supports.schemas = true;
 
-setupModels(mainDB, siac, banco, unsapay);
+//conexion para postgres siscaja
+const USER5 = encodeURIComponent(config.databases['siscajaDatabase'].username);
+const PASSWORD5 = encodeURIComponent(config.databases['siscajaDatabase'].password);
+const URI5 = `${config.databases['siscajaDatabase'].dialect}://${USER5}:${PASSWORD5}@${config.databases['siscajaDatabase'].host}:${config.databases['siscajaDatabase'].port}/${config.databases['siscajaDatabase'].database}`
 
-module.exports = { mainDB, siac, banco, unsapay };
+const siscaja = new Sequelize(URI5, {
+    dialect: config.databases['siscajaDatabase'].dialect,
+    logging: console.log
+});
+siscaja.dialect.supports.schemas = true;
+
+setupModels(mainDB, siac, banco, unsapay, siscaja);
+
+module.exports = { mainDB, siac, banco, unsapay, siscaja };
