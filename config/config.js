@@ -42,6 +42,14 @@ const config = {
             "port": process.env.DB_PORT4,
             "dialect": "mysql"
         },
+        "siscajaDatabase": {
+            "database": process.env.DB_NAME5, 
+            "username": process.env.DB_USER5,  
+            "password":  process.env.DB_PASSWORD5,
+            "host": process.env.DB_HOST5,
+            "port": process.env.DB_PORT5,
+            "dialect": "postgres"
+        },
     },
 }
 

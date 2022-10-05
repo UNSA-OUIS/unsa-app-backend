@@ -1,8 +1,10 @@
 const boom = require('@hapi/boom');
+const moment = require('moment');
 const {models} = require('../libs/sequelize').banco;
 const modelsUnsapay = require('../libs/sequelize').unsapay.models;
 const modelsSiac = require('../libs/sequelize').siac.models;
 const { Sequelize, Op } = require('sequelize');
+const bancoSequelize = require('../libs/sequelize').banco;
 
 class TicketService {
     constructor () {
@@ -90,7 +92,7 @@ class TicketService {
 
     }
 
-    async getConceptos(query) {
+    async getConcepts(query) {
         const data = await modelsUnsapay.Concepto.findAll({
             include: [
                 {
@@ -102,6 +104,79 @@ class TicketService {
         });
 
         return data;
+    }
+
+    async generadeCode(data) {
+        const activeCodes = await models.Banco.count({
+            where:{
+                usadoUnsapay: 1,
+                estaId: 1,
+                oper: 'A',
+                tipoPagoIdUnsapay: data.tipo_pago.id,
+                emailUnsapay: data.email
+            }
+        });
+        //return activeCodes;
+
+        if (activeCodes >= 3){
+            throw boom.notAcceptable('Número máximo de códigos permitidos por usuario excedido.');
+        }
+        else{
+
+            let localDateTime = moment().format('YYYY-MM-DD H:mm:ss');
+            //return localDateTime;
+            let cui = null;
+            let nues = null;
+            let espe = null;
+            let escuela = '';
+
+            if (data.administrado_id == 1) {
+                cui = data.administrado.cui;
+                nues = data.matricula.nues;
+                espe = data.matricula.espe;
+
+                if (data.matricula.especialidad == null) {
+                    escuela = data.matricula.escuela.nesc;
+                }
+                else{
+                    escuela = data.matricula.escuela.nesc + ' ' + data.matricula.especialidad.nomesp;
+                }                        
+            } 
+
+            let actualizado = await models.Banco.update(
+                {
+                    cui: cui,
+                    ndoc: data.administrado.dni,
+                    apn: data.administrado.apellidos + ', ' + data.administrado.nombres,
+                    nues: nues,                            
+                    espe: espe,
+                    emailUnsapay: data.email,
+                    fcreacionUnsapay: localDateTime,
+                    usadoUnsapay: 1
+                },
+                {
+                    where: {
+                        usadoUnsapay: 0,
+                        estaId: 1,
+                        oper: 'A',
+                        tipoPagoIdUnsapay: data.tipo_pago.id
+                    },
+                    limit: 1
+                }
+            );
+
+            if (actualizado) {
+                const rows = await bancoSequelize.query(
+                    `SELECT @codigo_web AS codigo, @monto_pago AS monto_pago;`,
+                    { type: bancoSequelize.QueryTypes.SELECT },
+                    
+                );
+                return rows[0];
+            }
+            else {
+                throw boom.expectationFailed('Se agotaron los códigos disponibles en el banco. Por favor vuelva a intentarlo más tarde.');
+            }
+        }
     }
 }
 
