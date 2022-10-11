@@ -2,7 +2,7 @@ const express = require('express');
 const UsersService = require('../services/userService');
 const validatorHandler = require('../middlewares/validatorHandler');
 const { createUserSchema, updateUserSchema, getUserSchema } =  require('../schemas/userSchema');
-
+const { verifyStudentRole } = require('../middlewares/authentication');
 
 const router = express.Router();
 const service = new UsersService();
@@ -19,7 +19,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id',
-    validatorHandler(getUserSchema, 'params'),
+    [validatorHandler(getUserSchema, 'params'), verifyStudentRole],
     async (req, res, next) => {
         try {
             const id = req.params.id;

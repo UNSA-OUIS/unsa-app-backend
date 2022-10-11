@@ -72,6 +72,11 @@ router.post('/', async (req, res, next) => {
             is_student = alumno ? true : false;
             is_teacher = docente ? true : false;
             apn = alumno ? alumno.apn : docente.apn;
+        } else {
+            return res.status(403).json({
+                ok: false,
+                err: "Utilizar correo institucional",
+            })
         }
 
         let user = {
@@ -83,7 +88,7 @@ router.post('/', async (req, res, next) => {
             is_student,
             is_teacher
         }
-        let token = jwt.sign({ user }, 'este-es-el-seed-desarrollo', { expiresIn: 60 * 60 * 24 * 30 });
+        let token = jwt.sign({ user }, process.env.TOKEN_SEED, { expiresIn: 60 * 60 * 24 * 30 });
         res.json({ok: true, user, token});
 
     } catch (error) {
