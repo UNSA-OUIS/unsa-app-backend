@@ -11,6 +11,7 @@ const { Comprobante, ComprobanteSchema } = require('./comprobanteModel');
 const { CuentaCorriente, CuentaCorrienteSchema } = require('./cuentaCorrienteModel');
 const { Acdiden, AcdidenSchema} = require('./acdidenModel');
 const { Siacdoc, SiacdocSchema} = require('./siacdocModel');
+const { Acdidal, AcdidalSchema} = require('./acdidalModel');
 
 
 function setupModels(mainDB, siac, banco, unsapay, siscaja) {
@@ -18,6 +19,7 @@ function setupModels(mainDB, siac, banco, unsapay, siscaja) {
     User.init(UserSchema, User.config(mainDB));
     Actmail.init(ActmailSchema, Actmail.config(siac));
     Acdiden.init(AcdidenSchema, Acdiden.config(siac));
+    Acdidal.init(AcdidalSchema, Acdidal.config(siac));
     Banco.init(BancoSchema, Banco.config(banco));
     Concepto.init(ConceptoSchema, Concepto.config(unsapay));
     Administrado.init(AdministradoSchema, Administrado.config(unsapay));
