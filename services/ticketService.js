@@ -67,27 +67,39 @@ class TicketService {
         });
 
         var bar = new Promise((resolve, reject) => {
-            data.forEach(async (element, index, array) => {
-                element.dataValues.pago = await modelsUnsapay.TipoPago.findOne({
-                    where: { id: element.tipoPagoIdUnsapay},
-                    where: Object.keys(whereTipoPago).length !== 0 ? whereTipoPago: null,
-                    include: ['concepto', 'administrado']
+            if (data.length){
+                data.forEach(async (element, index, array) => {
+                    whereTipoPago.id = element.tipoPagoIdUnsapay;
+                    element.dataValues.pago = await modelsUnsapay.TipoPago.findOne({
+                        //where: { id: element.tipoPagoIdUnsapay},
+                        where: whereTipoPago,
+                        //where: Object.keys(whereTipoPago).length !== 0 ? whereTipoPago: null,
+                        include: ['concepto', 'administrado']
+                    });
+    
+                    element.dataValues.especialidad = await modelsSiac.Actespe.findOne({
+                        where: { 
+                            nues: element.nues,
+                            numesp: element.espe
+                        }
+                    });
+                    if (index === array.length -1) resolve();
                 });
-
-                element.dataValues.especialidad = await modelsSiac.Actespe.findOne({
-                    where: { 
-                        nues: element.nues,
-                        numesp: element.espe
-                    }
-                });
-                if (index === array.length -1) resolve();
-            });
+            }
+            else {
+                resolve();
+            }
+            
         });
         
         return bar.then(()=>{
-            return data.filter((element) => {
-                return element.dataValues.pago != null;
-            });
+            if (data.length){
+                return data.filter((element) => {
+                    return element.dataValues.pago != null;
+                });
+            }
+            else data;
+           
         })
 
     }
