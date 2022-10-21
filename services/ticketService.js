@@ -77,7 +77,7 @@ class TicketService {
                         include: ['concepto', 'administrado']
                     });
     
-                    element.dataValues.especialidad = await modelsSiac.Actespe.findOne({
+                    element.dataValues.especialidad = await modelsSiac.Especialidad.findOne({
                         where: { 
                             nues: element.nues,
                             numesp: element.espe

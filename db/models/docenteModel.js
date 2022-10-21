@@ -2,7 +2,11 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const SIACDOC_TABLE = 'SIAC_DOC';
 
-const SiacdocSchema = {
+const DocenteSchema = {
+    depend: {
+        allowNull: false,
+        type: DataTypes.CHAR,
+    },
     apn: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -18,12 +22,12 @@ const SiacdocSchema = {
     }
 }
 
-class Siacdoc extends Model {
+class Docente extends Model {
     static associate(models) {
-        /*this.hasOne(models.Customer, { 
-            as: 'customer',
-            foreignKey: 'userId'
-        })*/
+        this.belongsTo(models.Departamento, { 
+            as: 'departamento',
+            foreignKey: 'depend'
+        })
 
     }
 
@@ -31,11 +35,11 @@ class Siacdoc extends Model {
         return {
             sequelize,
             tableName: SIACDOC_TABLE,
-            modelName: 'Siacdoc',
+            modelName: 'Docente',
             timestamps: false,
             schema: process.env.DB_NAME2
         }
     }
 }
 
-module.exports = { SIACDOC_TABLE, SiacdocSchema, Siacdoc }
+module.exports = { SIACDOC_TABLE, DocenteSchema, Docente }

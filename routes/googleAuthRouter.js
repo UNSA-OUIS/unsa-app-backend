@@ -1,19 +1,22 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const UsersService = require('../services/userService');
+
+const UserService = require('../services/userService');
+const AlumnoService = require('../services/alumnoService');
+const EmailService = require('../services/emailService');
+const DocenteService = require('../services/docenteService');
 
 const {OAuth2Client} = require('google-auth-library');
+const boom = require('@hapi/boom');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-const siacModels = require('../libs/sequelize').siac.models;
-
-// const TicketService = require('../services/ticketService');
-
 
 const router = express.Router();
 
-const service = new UsersService();
-// const service = new TicketService();
+// Services
+const userService = new UserService();
+const alumnoService = new AlumnoService();
+const emailService = new EmailService();
+const docenteService = new DocenteService();
 
 // Configuración de Google
 async function verify( token ) {
@@ -34,62 +37,54 @@ async function verify( token ) {
 
 router.post('/', async (req, res, next) => {
     try {
+        let tokenGoogle = req.body.idtoken;
         let is_student, is_teacher = false;
         let apn = '';
-        let tokenGoogle = req.body.idtoken;
         let googleUser = await verify(tokenGoogle)
                             .catch( err => {
-                                console.error(err);
-                                return res.status(403).json({
-                                    ok: false,
-                                    err: err
-                                })
+                                throw new Error(err);
                             });
+        const emailUnsa = await emailService.findOne(googleUser.email);
+        if (!emailUnsa) {
+            throw boom.notAcceptable('Email no registrado!');
+        }
 
-        const userDB = await service.findOneByEmail(googleUser.email);
+        const alumno = await alumnoService.findOneByCui(emailUnsa.cui);
+        const docente = await docenteService.findOneByEmail(emailUnsa.mail);
+        is_student = alumno ? true : false;
+        is_teacher = docente ? true : false;
+        apn = alumno ? alumno.apn : docente.apn;
+        apn = apn.replace('/', ' ');
+
+        const userDB = await userService.findOneByEmail(googleUser.email);
         if (!userDB) {
-
             const body = {
                 name: googleUser.name,
                 email: googleUser.email
             }
             await service.create(body);
-            
-        }
+        }    
 
-        let emailGoogle = googleUser.email.split('@')[0];
-        const emailUnsa = await siacModels.Actmail.findOne({
-            where: { mail: emailGoogle } 
-        });
-
-        if (emailUnsa) {
-            const alumno = await siacModels.Acdiden.findOne({
-                where: { cui: emailUnsa.cui } 
-            });
-            const docente = await siacModels.Siacdoc.findOne({
-                where: { correo: emailGoogle } 
-            });
-            is_student = alumno ? true : false;
-            is_teacher = docente ? true : false;
-            apn = alumno ? alumno.apn : docente.apn;
-        } else {
-            return res.status(403).json({
-                ok: false,
-                err: "Utilizar correo institucional",
-            })
-        }
-
-        let user = {
+        let user_token = {
             name: googleUser.name,
             img: googleUser.img,
-            pre_email: emailGoogle,
+            user_email: emailUnsa.mail,
             email: googleUser.email,
             apn,
             is_student,
             is_teacher
         }
-        let token = jwt.sign({ user }, process.env.TOKEN_SEED, { expiresIn: 60 * 60 * 24 * 30 });
-        res.json({ok: true, user, token});
+        let token = jwt.sign({ user_token }, process.env.TOKEN_SEED, { expiresIn: 60 * 60 * 24 * 30 });
+        res.json({
+            apn,
+            user_email: emailUnsa.mail,
+            email: googleUser.email,
+            is_student,
+            is_teacher,
+            alumno,
+            docente,
+            token
+        });
 
     } catch (error) {
         next(error);
