@@ -2,6 +2,7 @@ const express = require('express');
 const faker = require('faker');
 const routersApi = require('./routes');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/errorHandler');
 
 //se inicia la aplicación
@@ -29,6 +30,11 @@ const options = {
         }
     }
 }
+
+app.use(fileUpload({
+    createParentPath: true
+}));
+
 app.use(cors());
 
 //enrutamiento

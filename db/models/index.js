@@ -15,6 +15,7 @@ const { Matricula, MatriculaSchema} = require('./matriculaModel');
 const { ConceptoCaja, ConceptoCajaSchema} = require('./conceptoCajaModel');
 const { Departamento, DepartamentoSchema } = require('./departamentoModel');
 const { Facultad, FacultadSchema } = require('./facultadModel');
+const { DetalleCanje, DetalleCanjeSchema } = require('./detallesCanjeModel');
 
 
 function setupModels(mainDB, siac, banco, unsapay, siscaja) {
@@ -36,6 +37,7 @@ function setupModels(mainDB, siac, banco, unsapay, siscaja) {
     ConceptoCaja.init(ConceptoCajaSchema, ConceptoCaja.config(siscaja));
     Departamento.init(DepartamentoSchema, Departamento.config(siac));
     Facultad.init(FacultadSchema, Facultad.config(siac));
+    DetalleCanje.init(DetalleCanjeSchema, DetalleCanje.config(siscaja));
 
     //Se inicializan relaciones de los modelos
     User.associate(siac.models);
