@@ -2,7 +2,11 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const ACTESCU_TABLE = 'actescu';
 
-const ActescuSchema = {
+const EscuelaSchema = {
+    facu: {
+        allowNull: false,
+        type: DataTypes.CHAR,
+    },
     nues: {
         allowNull: false,
         type: DataTypes.CHAR,
@@ -15,9 +19,16 @@ const ActescuSchema = {
     }
 }
 
-class Actescu extends Model {
+class Escuela extends Model {
     static associate(models) {
-        
+        this.belongsTo(models.Matricula, {
+            foreignKey: 'nues'
+        });
+
+        this.belongsTo(models.Facultad, {
+            as: 'facultad',
+            foreignKey: 'facu'
+        });
 
     }
 
@@ -25,11 +36,11 @@ class Actescu extends Model {
         return {
             sequelize,
             tableName: ACTESCU_TABLE,
-            modelName: 'Actescu',
+            modelName: 'Escuela',
             timestamps: false,
             schema: process.env.DB_NAME2
         }
     }
 }
 
-module.exports = { ACTESCU_TABLE, ActescuSchema, Actescu }
+module.exports = { ACTESCU_TABLE, EscuelaSchema, Escuela }

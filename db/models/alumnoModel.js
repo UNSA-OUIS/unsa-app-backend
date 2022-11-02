@@ -1,45 +1,45 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const ACDIDAL_TABLE = 'acdidal';
+const ACDIDEN_TABLE = 'acdiden';
 
-const AcdidalSchema = {
+const AlumnoSchema = {
     cui: {
         allowNull: false,
         type: DataTypes.STRING,
         primaryKey: true
     },
-    nues: {
+    apn: {
         allowNull: false,
         type: DataTypes.STRING,
     },
-    espe: {
+    sex: {
         allowNull: false,
         type: DataTypes.STRING
     },
-    cod0: {
+    dic: {
         allowNull: false,
         type: DataTypes.STRING
     }
 }
 
-class Acdidal extends Model {
+class Alumno extends Model {
     static associate(models) {
-        /*this.hasOne(models.Customer, { 
-            as: 'customer',
-            foreignKey: 'userId'
-        })*/
+        this.hasMany(models.Matricula, { 
+            as: 'matriculas',
+            foreignKey: 'cui',
+        });
 
     }
 
     static config(sequelize) {
         return {
             sequelize,
-            tableName: ACDIDAL_TABLE,
-            modelName: 'Acdidal',
+            tableName: ACDIDEN_TABLE,
+            modelName: 'Alumno',
             timestamps: false,
             schema: process.env.DB_NAME2
         }
     }
 }
 
-module.exports = { ACDIDAL_TABLE, AcdidalSchema, Acdidal }
+module.exports = { ACDIDEN_TABLE, AlumnoSchema, Alumno }

@@ -2,7 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const ACTESPE_TABLE = 'actespe';
 
-const ActespeSchema = {
+const EspecialidadSchema = {
     nues: {
         allowNull: false,
         type: DataTypes.CHAR,
@@ -20,9 +20,9 @@ const ActespeSchema = {
     }
 }
 
-class Actespe extends Model {
+class Especialidad extends Model {
     static associate(models) {
-        
+        this.belongsTo(models.Matricula);
 
     }
 
@@ -30,11 +30,11 @@ class Actespe extends Model {
         return {
             sequelize,
             tableName: ACTESPE_TABLE,
-            modelName: 'Actespe',
+            modelName: 'Especialidad',
             timestamps: false,
             schema: process.env.DB_NAME2
         }
     }
 }
 
-module.exports = { ACTESPE_TABLE, ActespeSchema, Actespe }
+module.exports = { ACTESPE_TABLE, EspecialidadSchema, Especialidad }

@@ -34,7 +34,7 @@ const UserSchema = {
 
 class User extends Model {
     static associate(models) {
-        this.hasOne(models.Actmail, { 
+        this.hasOne(models.Email, { 
             as: 'siac_email',
             foreignKey: "mail",
             sourceKey: 'email',

@@ -176,11 +176,11 @@ class Banco extends Model {
             separate: true,
         });
 
-        this.belongsTo(siacModels.Actescu, {
+        this.belongsTo(siacModels.Escuela, {
             as: 'escuela',
             foreignKey: "nues"
         });
-        this.belongsTo(siacModels.Actespe, {
+        this.belongsTo(siacModels.Especialidad, {
             as: 'especialidad',
             foreignKey: "nues",
             sourceKey: "nues",

@@ -121,6 +121,10 @@ class Canje extends Model {
             as: 'comprobante',
             foreignKey: "comprobanteId",
         });
+        this.hasMany(models.DetalleCanje,{
+            as: 'detalles',
+            foreignKey: 'canjeId'
+        });
 
     }
 
