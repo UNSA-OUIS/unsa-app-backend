@@ -62,7 +62,7 @@ router.post('/', async (req, res, next) => {
                 name: googleUser.name,
                 email: googleUser.email
             }
-            await service.create(body);
+            await userService.create(body);
         }    
 
         let user_token = {

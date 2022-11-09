@@ -1,15 +1,14 @@
 const express = require('express');
 const CanjeService = require('../services/canjeService');
-
-const siscajaModels = require('../libs/sequelize').siscaja.models;
-
+const ConceptoService = require('../services/conceptoService');
 
 const router = express.Router();
-const service = new CanjeService();
+const serviceCanje = new CanjeService();
+const serviceConcepto = new ConceptoService();
 
 router.get('/', async (req, res, next) => {
     try {
-        const canjes = await service.find(req.query);
+        const canjes = await serviceCanje.find(req.query);
 
         res.json(canjes);
     } catch (error) {
@@ -20,9 +19,15 @@ router.get('/', async (req, res, next) => {
 
 router.get('/conceptos', async (req, res, next) => {
     try {
-        const conceptos = await siscajaModels.ConceptoCaja.findAll({ where: { to_canje: true} });
+        const conceptos = await serviceConcepto.findAllToCanjes();
+        const conceptosGlobales = await serviceConcepto.findAllGlobalToCanjes();
 
-        res.json(conceptos);
+
+
+        res.json({
+            conceptos,
+            conceptosGlobales
+        });
     } catch (error) {
         next(error);
     }
