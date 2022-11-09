@@ -34,4 +34,14 @@ router.get('/conceptos', async (req, res, next) => {
     
 });
 
+router.post('/', async (req, res, next) => {
+    try {
+        const newCanje = await service.create(req);
+        res.status(201).json(newCanje);
+        
+    } catch (err) {
+        next(err);
+    }
+});
+
 module.exports = router;

@@ -10,8 +10,8 @@ function routersApi(app) {
     app.use('/api/v1', router);
     router.use('/google', googleAuthRouter);
     router.use('/users', verifyToken, usersRouter);
-    router.use('/tickets', ticketRouter);
-    router.use('/canjes', canjeRouter);
+    router.use('/tickets', verifyToken, ticketRouter);
+    router.use('/canjes', verifyToken, canjeRouter);
 }
 
 module.exports = routersApi;
