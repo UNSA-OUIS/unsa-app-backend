@@ -39,4 +39,15 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+router.get('/verify-number', async (req, res, next) => {
+    try {
+        const number = await service.verifyOperationNumber(req.query);
+
+        res.json(number)
+    } catch (error) {
+        next(error);
+    }
+    
+});
+
 module.exports = router;

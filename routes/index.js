@@ -11,7 +11,7 @@ function routersApi(app) {
     router.use('/google', googleAuthRouter);
     router.use('/users', verifyToken, usersRouter);
     router.use('/tickets', verifyToken, ticketRouter);
-    router.use('/canjes', verifyToken, canjeRouter);
+    router.use('/canjes', canjeRouter);
 }
 
 module.exports = routersApi;
