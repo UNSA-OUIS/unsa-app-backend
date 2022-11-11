@@ -16,6 +16,7 @@ const { ConceptoCaja, ConceptoCajaSchema} = require('./conceptoCajaModel');
 const { Departamento, DepartamentoSchema } = require('./departamentoModel');
 const { Facultad, FacultadSchema } = require('./facultadModel');
 const { DetalleCanje, DetalleCanjeSchema } = require('./detallesCanjeModel');
+const { NumeroOperacion, NumeroOperacionSchema } = require('./numeroOperacionModel');
 
 
 function setupModels(mainDB, siac, banco, unsapay, siscaja) {
@@ -38,6 +39,7 @@ function setupModels(mainDB, siac, banco, unsapay, siscaja) {
     Departamento.init(DepartamentoSchema, Departamento.config(siac));
     Facultad.init(FacultadSchema, Facultad.config(siac));
     DetalleCanje.init(DetalleCanjeSchema, DetalleCanje.config(siscaja));
+    NumeroOperacion.init(NumeroOperacionSchema, NumeroOperacion.config(siscaja));
 
     //Se inicializan relaciones de los modelos
     User.associate(siac.models);
@@ -51,6 +53,7 @@ function setupModels(mainDB, siac, banco, unsapay, siscaja) {
     Departamento.associate(siac.models);
     Facultad.associate(siac.models);
     Escuela.associate(siac.models);
+    NumeroOperacion.associate(siscaja.models);
     
 }
 

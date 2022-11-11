@@ -42,6 +42,7 @@ class CuentaCorriente extends Model {
             sequelize,
             tableName: CUENTA_TABLE,
             modelName: 'CuentaCorriente',
+            timestamps: false,
         }
     }
 }

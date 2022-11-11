@@ -2,6 +2,7 @@
 const {models} = require('../libs/sequelize').siscaja;
 const { Sequelize, Op } = require('sequelize');
 const moment = require('moment');
+const boom = require('@hapi/boom');
 
 class CanjeService {
     constructor () {
@@ -35,6 +36,51 @@ class CanjeService {
         });
         
         return data;
+    }
+
+    async verifyOperationNumber(query){
+        const cuenta = await models.CuentaCorriente.findByPk(query.cuenta_corriente_id, {
+            attributes: ['id', 'banco']
+        });
+
+        //return cuenta;
+
+        const canjeExist = await models.Canje.count({ where: {
+                    estado: 'pendiente',
+                    cuenta_corriente_id: query.cuenta_corriente_id,
+                    nro_operacion: query.nro_operacion,
+                    fecha_pago: query.fecha_pago
+                } });
+        if (canjeExist > 0) {
+            throw boom.notAcceptable('El número de operación ingresado ya se encuentra registrado en la fecha indicada para canjes.');
+        }
+        
+        const nroExist = await models.NumeroOperacion.count({ 
+            where: {
+                entidadBancaria: cuenta.dataValues.banco,
+                numero: query.nro_operacion,
+                fecha: query.fecha_pago,
+                migrado: false
+            } ,
+            include: [
+                {
+                    where: {
+                        estado: {[Op.not]: 'anulado'}
+                    },
+                    association: 'comprobante'
+                }
+            ],
+        });
+
+        if (nroExist > 0) {
+            throw boom.notAcceptable('El número de operación ingresado ya se encuentra registrado en la fecha indicada.');
+        }
+        else {
+            return {message:"El número de operación ingresado se encuentra disponible en la fecha indicada."}
+        }
+
+        return nroExist;
+
     }
 
     async create(req){
